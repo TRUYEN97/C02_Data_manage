@@ -2,10 +2,13 @@ package com.tec02.Service;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -17,6 +20,8 @@ import com.tec02.config.StorageProperties;
 @Service
 public class FileSystemStorageService {
 
+	private final Log log = LogFactory.getLog(getClass());
+	
 	@Autowired
 	private StorageProperties properties;
 
@@ -25,11 +30,12 @@ public class FileSystemStorageService {
 	}
 
 	private String store(MultipartFile file, Path path) {
-		try {
+		try (InputStream inputStream = file.getInputStream()){
 			if (!Files.exists(path.getParent())) {
 				Files.createDirectories(path.getParent());
 			}
-			Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
+			log.info(String.format("save file: %s", path));
 			return path.toString();
 		} catch (Exception e) {
 			if (path != null) {
@@ -42,6 +48,7 @@ public class FileSystemStorageService {
 	public Resource loadFileAsResource(String fileName) {
 		try {
 			Resource resource = new UrlResource(this.properties.resolveFile(fileName).toUri());
+			log.info(String.format("download file: %s", fileName));
 			if (resource.exists()) {
 				return resource;
 			} else {
@@ -57,6 +64,7 @@ public class FileSystemStorageService {
 		if (file.exists() && !file.delete()) {
 			throw new Exception(String.format("Delete file failed! %s", path));
 		}
+		log.info(String.format("delete file: %s", path));
 		clearStore(file);
 	}
 

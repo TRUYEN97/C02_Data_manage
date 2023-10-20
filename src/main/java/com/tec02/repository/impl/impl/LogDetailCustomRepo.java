@@ -24,10 +24,10 @@ public class LogDetailCustomRepo extends BaseRopoImpl<LogDetail, RequestDto> {
 		if (filter.getSn() != null || filter.getMlbsn() != null) {
 			List<Predicate> p = new ArrayList<>();
 			if (filter.getSn() != null) {
-				p.add(cb.equal(root.get("sn"), filter.getSn()));
+				p.add(cb.like(root.get("sn"),  String.format("%%%s%%",filter.getSn())));
 			}
 			if (filter.getMlbsn() != null) {
-				p.add(cb.equal(root.get("mlbsn"), filter.getMlbsn()));
+				p.add(cb.like(root.get("mlbsn"),  String.format("%%%s%%",filter.getMlbsn())));
 			}
 			predicates.add(cb.or(p.toArray(new Predicate[0])));
 		}
@@ -41,19 +41,22 @@ public class LogDetailCustomRepo extends BaseRopoImpl<LogDetail, RequestDto> {
 			predicates.add(cb.equal(root.get("mode"), filter.getMode()));
 		}
 		if (filter.getPnname() != null) {
-			predicates.add(cb.equal(root.get("pnname"), filter.getPnname()));
+			predicates.add(cb.like(root.get("pnname"),  String.format("%%%s%%",filter.getPnname())));
+		}
+		if (filter.getPcname() != null) {
+			predicates.add(cb.like(root.get("pcname"), String.format("%%%s%%",filter.getPcname())));
 		}
 		if (filter.getTest_software_version() != null) {
-			predicates.add(cb.equal(root.get("test_software_version"), filter.getTest_software_version()));
+			predicates.add(cb.like(root.get("test_software_version"),  String.format("%s%%",filter.getTest_software_version())));
 		}
 		if (filter.getPosition() != null) {
-			predicates.add(cb.equal(root.get("position"), filter.getPosition()));
+			predicates.add(cb.like(root.get("position"),  String.format("%%%s%%",filter.getPosition())));
 		}
 		if (filter.getError_code() != null) {
-			predicates.add(cb.equal(root.get("error_code"), filter.getError_code()));
+			predicates.add(cb.like(root.get("error_code"),  String.format("%%%s%%",filter.getError_code())));
 		}
 		if (filter.getError_details() != null) {
-			predicates.add(cb.equal(root.get("error_details"), filter.getError_details()));
+			predicates.add(cb.like(root.get("error_details"),  String.format("%%%s%%",filter.getError_details())));
 		}
 		if (filter.getStatus() != null) {
 			predicates.add(cb.equal(root.get("status"), filter.getStatus()));

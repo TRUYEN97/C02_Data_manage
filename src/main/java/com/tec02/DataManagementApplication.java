@@ -22,7 +22,8 @@ import jakarta.transaction.Transactional;
 @EnableJpaAuditing(auditorAwareRef="auditorAware")
 public class DataManagementApplication implements CommandLineRunner {
 
-	protected final Log logger = LogFactory.getLog(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
+	
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -51,5 +52,6 @@ public class DataManagementApplication implements CommandLineRunner {
 			List<User> userDtos = userRepository.findAll();
 			userDtos.toString();
 		}
+        logger.info("Server started successfully");
 	}
 }

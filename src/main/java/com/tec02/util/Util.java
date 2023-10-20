@@ -189,4 +189,12 @@ public class Util {
 			return null;
 		}
 	}
+
+	public static Instant longCvtInstant(Long time) {
+		try {
+			return new Date(time).toInstant();
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }

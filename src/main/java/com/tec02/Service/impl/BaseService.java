@@ -61,6 +61,7 @@ E extends AbsIdAndCreateTime> implements IBaseService<D, E> {
 		if (id == null) {
 			return;
 		}
+		
 		this.repository.deleteById(id);
 	}
 

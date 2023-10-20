@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tec02.repository.IRepoCustom;
@@ -47,6 +49,17 @@ public abstract class BaseRopoImpl<X, R> implements IRepoCustom<X, R> {
 		if (predicate != null) {
 			predicate.create(filter, cb, root, query);
 		}
+		Sort sort;
+		if(pageable != null && (sort = pageable.getSort()) != null) {
+			for (Order order : sort) {
+				String property = order.getProperty();
+				if(order.isAscending()) {
+					query.orderBy(cb.asc(root.get(property)));
+				}else {
+					query.orderBy(cb.desc(root.get(property)));
+				}
+			}
+		}
 		return getResultList(pageable, query);
 	}
 
@@ -76,6 +89,17 @@ public abstract class BaseRopoImpl<X, R> implements IRepoCustom<X, R> {
 				}
 			}
 			query.multiselect(selections);
+			Sort sort;
+			if(pageable != null && (sort = pageable.getSort()) != null) {
+				for (Order order : sort) {
+					String property = order.getProperty();
+					if(order.isAscending()) {
+						query.orderBy(cb.asc(root.get(property)));
+					}else {
+						query.orderBy(cb.desc(root.get(property)));
+					}
+				}
+			}
 			predicate.create(filter, cb, root, query);
 			List<Tuple> tuples = getResultList(pageable, query);
 			List<T> tS = new ArrayList<>();

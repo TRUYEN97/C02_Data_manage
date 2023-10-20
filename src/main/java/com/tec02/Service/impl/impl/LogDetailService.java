@@ -61,11 +61,12 @@ public class LogDetailService extends BaseService<LogDetailDto, LogDetail> {
 			throw new Exception("have no log test!");
 		}
 		if (multipartFiles.size() < 2) {
-			throw new Exception("The number of files needs greater than 2");
+			throw new Exception("The number of files needs greater than 2 (Json file, Text file)");
 		}
 		if (multipartFiles.size() > 5) {
 			throw new Exception("Do not upload more than 5 log files");
 		}
+
 		byte[] object = multipartFiles.get(0).getBytes();
 		UploadLogFileRequest uploadLogFileRequest = ModelMapperUtil.map(JSONObject.parse(object),
 				UploadLogFileRequest.class);
@@ -129,6 +130,7 @@ public class LogDetailService extends BaseService<LogDetailDto, LogDetail> {
 		if (type == null || !type.trim().toLowerCase().equals("txt")) {
 			throw new Exception("the second file must be a text log");
 		}
+		///////////////////////////////////////////
 		FileLog fileLog = new FileLog();
 		fileLog.setName(String.format("%s_serial.%s", nameSaved, type));
 		String dir = String.format("%s/serial/%s", dirString, fileLog.getName());
@@ -137,8 +139,18 @@ public class LogDetailService extends BaseService<LogDetailDto, LogDetail> {
 		this.storageService.storeFile(multipartFile, dir);
 		for (int i = 2; i < multipartFiles.size(); i++) {
 			multipartFile = multipartFiles.get(i);
+			String fType = getType(multipartFile);
 			fileLog = new FileLog();
-			fileLog.setName(String.format("%s_%s.%s", nameSaved, i - 1, getType(multipartFile)));
+			String fileName = multipartFile.getOriginalFilename().trim().toLowerCase();
+			String newName = String.format("%s_%s.%s", nameSaved, i - 1, fType);
+			if (fileName.contains("litepoint")) {
+				newName = String.format("%s_litepoint_%s.%s", nameSaved, i - 1, fType);
+			} else if (fileName.contains("ble")) {
+				newName = String.format("%s_BLE_%s.%s", nameSaved, i - 1, fType);
+			} else if (fileName.contains("wifi")) {
+				newName = String.format("%s_WIFI_%s.%s", nameSaved, i - 1, fType);
+			}
+			fileLog.setName(newName);
 			dir = String.format("%s/other/%s", dirString, fileLog.getName());
 			fileLog.setPath(dir);
 			logDetail.addFilelog(this.filelogRepository.save(fileLog));
@@ -154,6 +166,33 @@ public class LogDetailService extends BaseService<LogDetailDto, LogDetail> {
 
 	}
 
+	public void delete(Long... ids) {
+		if (ids == null) {
+			return;
+		}
+		for (Long id : ids) {
+			delete(id);
+		}
+	}
+
+	public void delete(Long id) {
+		List<FileLog> fileLogs = this.filelogRepository.findAllByLogdetailId(id);
+		if (fileLogs != null) {
+			for (FileLog fileLog : fileLogs) {
+				String path = fileLog.getPath();
+				if (path != null && !path.isBlank()) {
+					try {
+						this.storageService.deleteFile(path);
+					} catch (Exception e) {
+						throw new RuntimeException(String.format("Delete log id(%s) - path(%s) failed: %s", id, path,
+								e.getLocalizedMessage()));
+					}
+				}
+			}
+			this.logDetailRepository.deleteById(id);
+		}
+	}
+
 	private String getType(MultipartFile multipartFile) {
 		String fileName = multipartFile.getOriginalFilename();
 		if (!fileName.contains(".")) {
@@ -167,10 +206,11 @@ public class LogDetailService extends BaseService<LogDetailDto, LogDetail> {
 		return resource;
 	}
 
-	public List<LogDetailDto> findAllLogDetailDto(RequestDto rd, List<String> items, PageRequest pageable) throws Exception {
+	public List<LogDetailDto> findAllLogDetailDto(RequestDto rd, List<String> items, PageRequest pageable)
+			throws Exception {
 		return convertToDtos(detailCustom.findAllByParameter(rd, LogDetail.class, items, pageable));
 	}
-	
+
 	public List<LogDetail> findAllLogDetail(RequestDto rd, List<String> items, PageRequest pageable) throws Exception {
 		return detailCustom.findAllByParameter(rd, LogDetail.class, items, pageable);
 	}

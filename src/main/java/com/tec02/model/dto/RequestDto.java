@@ -30,13 +30,37 @@ public class RequestDto {
 	private String line;
 	protected String start_time;
 	protected String finish_time;
-	
+
 	public Instant getStart_time() {
-		return Util.stringCvtInstant(start_time, "yyyy-MM-dd_HH-mm-ss");
+		if (start_time != null) {
+			if (start_time.matches("^[0-9]+")) {
+				return Util.longCvtInstant(Long.valueOf(start_time));
+			}else{
+				return Util.stringCvtInstant(start_time
+						, "yyyy-MM-dd HH:mm:ss"
+						, "yyyy-MM-dd HH:mm:ss.SSS"
+						, "yyyy/MM/dd HH:mm:ss"
+						, "yyyy/MM/dd HH:mm:ss.SSS"
+						, "yyyy-MM-dd_HH-mm-ss");
+			}
+		}
+		return null;
 	}
 
 	public Instant getFinish_time() {
-		return Util.stringCvtInstant(finish_time, "yyyy-MM-dd_HH-mm-ss");
+		if (finish_time != null) {
+			if (finish_time.matches("^[0-9]+")) {
+				return Util.longCvtInstant(Long.valueOf(finish_time));
+			}else{
+				return Util.stringCvtInstant(finish_time
+						, "yyyy-MM-dd HH:mm:ss"
+						, "yyyy-MM-dd HH:mm:ss.SSS"
+						, "yyyy/MM/dd HH:mm:ss"
+						, "yyyy/MM/dd HH:mm:ss.SSS"
+						, "yyyy-MM-dd_HH-mm-ss");
+			}
+		}
+		return null;
 	}
-	
+
 }
