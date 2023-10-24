@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.tec02</groupId>
 	<artifactId>teco2</artifactId>
-	<version>1.9.0</version>
+	<version>1.10.0</version>
 	<name>DataManagement</name>
 	<description>TE C02 Log Server</description>
 	<properties>

@@ -1,0 +1,29 @@
+2023-10-21 10:57:14.441 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.tec02.DataManagementApplicationTests]: DataManagementApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2023-10-21 10:57:14.515 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.tec02.DataManagementApplication for test class com.tec02.DataManagementApplicationTests
+2023-10-21 10:57:14.906 [main] INFO  c.t.DataManagementApplicationTests - Starting DataManagementApplicationTests using Java 19.0.2 with PID 9592 (started by Administrator in D:\Eclipse\TEc02Backend\DataManagement)
+2023-10-21 10:57:14.908 [main] INFO  c.t.DataManagementApplicationTests - No active profile set, falling back to 1 default profile: "default"
+2023-10-21 10:57:15.492 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-10-21 10:57:15.579 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 82 ms. Found 8 JPA repository interfaces.
+2023-10-21 10:57:15.875 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2023-10-21 10:57:15.941 [main] INFO  o.s.w.s.a.s.AnnotationActionEndpointMapping - Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2023-10-21 10:57:16.093 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-10-21 10:57:16.133 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.1.7.Final
+2023-10-21 10:57:16.400 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2023-10-21 10:57:17.034 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@17136390
+2023-10-21 10:57:17.036 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2023-10-21 10:57:17.076 [main] INFO  SQL dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQLDialect
+2023-10-21 10:57:17.476 [main] INFO  o.h.tuple.entity.EntityMetamodel - HHH000157: Lazy property fetching available for: com.tec02.model.entity.impl.Station
+2023-10-21 10:57:17.630 [main] INFO  o.h.tuple.entity.EntityMetamodel - HHH000157: Lazy property fetching available for: com.tec02.model.entity.impl.Role
+2023-10-21 10:57:17.655 [main] INFO  o.h.tuple.entity.EntityMetamodel - HHH000157: Lazy property fetching available for: com.tec02.model.entity.impl.Product
+2023-10-21 10:57:17.709 [main] INFO  o.h.tuple.entity.EntityMetamodel - HHH000157: Lazy property fetching available for: com.tec02.model.entity.impl.Line
+2023-10-21 10:57:17.720 [main] INFO  o.h.tuple.entity.EntityMetamodel - HHH000157: Lazy property fetching available for: com.tec02.model.entity.impl.LogDetail
+2023-10-21 10:57:17.873 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-10-21 10:57:17.881 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-10-21 10:57:18.431 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-10-21 10:57:18.802 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@70d24586, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@58e9e852, org.springframework.security.web.context.SecurityContextHolderFilter@62109320, org.springframework.security.web.header.HeaderWriterFilter@22b2d9e3, org.springframework.security.web.authentication.logout.LogoutFilter@6b9b9cb9, com.tec02.config.JwtAuthenticationFilter@77e1b84c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@276b68af, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@19412eef, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@52238861, org.springframework.security.web.session.SessionManagementFilter@33ccab9c, org.springframework.security.web.access.ExceptionTranslationFilter@125ed27, org.springframework.security.web.access.intercept.AuthorizationFilter@2a10407e]
+2023-10-21 10:57:19.054 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2023-10-21 10:57:19.200 [main] INFO  c.t.DataManagementApplicationTests - Started DataManagementApplicationTests in 4.512 seconds (process running for 6.491)
+2023-10-21 10:57:19.516 [main] INFO  c.t.DataManagementApplication$$SpringCGLIB$$0 - Server started successfully
+2023-10-21 10:57:19.730 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-10-21 10:57:19.733 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2023-10-21 10:57:19.740 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

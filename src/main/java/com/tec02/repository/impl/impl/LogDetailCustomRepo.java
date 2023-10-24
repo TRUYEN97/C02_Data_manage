@@ -24,10 +24,10 @@ public class LogDetailCustomRepo extends BaseRopoImpl<LogDetail, RequestDto> {
 		if (filter.getSn() != null || filter.getMlbsn() != null) {
 			List<Predicate> p = new ArrayList<>();
 			if (filter.getSn() != null) {
-				p.add(cb.like(root.get("sn"),  String.format("%%%s%%",filter.getSn())));
+				p.add(cb.equal(root.get("sn"),  filter.getSn()));
 			}
 			if (filter.getMlbsn() != null) {
-				p.add(cb.like(root.get("mlbsn"),  String.format("%%%s%%",filter.getMlbsn())));
+				p.add(cb.equal(root.get("mlbsn"),  filter.getMlbsn()));
 			}
 			predicates.add(cb.or(p.toArray(new Predicate[0])));
 		}
@@ -41,7 +41,7 @@ public class LogDetailCustomRepo extends BaseRopoImpl<LogDetail, RequestDto> {
 			predicates.add(cb.equal(root.get("mode"), filter.getMode()));
 		}
 		if (filter.getPnname() != null) {
-			predicates.add(cb.like(root.get("pnname"),  String.format("%%%s%%",filter.getPnname())));
+			predicates.add(cb.equal(root.get("pnname"),  filter.getPnname()));
 		}
 		if (filter.getPcname() != null) {
 			predicates.add(cb.like(root.get("pcname"), String.format("%%%s%%",filter.getPcname())));
