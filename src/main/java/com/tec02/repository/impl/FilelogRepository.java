@@ -6,6 +6,8 @@ import com.tec02.model.entity.impl.FileLog;
 import com.tec02.repository.IBaseRepo;
 
 public interface FilelogRepository extends IBaseRepo<FileLog> {
+	List<FileLog> findAllByLogdetailIdIn(List<Long> ids);
+	
 	List<FileLog> findAllByLogdetailId(Long id);
 
 }

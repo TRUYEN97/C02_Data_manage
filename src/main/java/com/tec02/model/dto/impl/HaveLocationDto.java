@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public abstract class HaveLocationDtio extends HaveStartTimeAndFinishTimeDto {
+public abstract class HaveLocationDto extends HaveStartTimeAndFinishTimeDto {
 	private String product;
 	private String station;
 	private String line;

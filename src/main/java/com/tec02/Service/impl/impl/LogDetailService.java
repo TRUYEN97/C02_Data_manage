@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +15,7 @@ import com.tec02.Service.FileSystemStorageService;
 import com.tec02.Service.impl.BaseService;
 import com.tec02.model.dto.RequestDto;
 import com.tec02.model.dto.impl.LogDetailDto;
+import com.tec02.model.dto.impl.LogDetailDtoShort;
 import com.tec02.model.dto.updownload.UploadLogFileRequest;
 import com.tec02.model.entity.impl.FileLog;
 import com.tec02.model.entity.impl.Item;
@@ -206,16 +208,33 @@ public class LogDetailService extends BaseService<LogDetailDto, LogDetail> {
 		return resource;
 	}
 
-	public List<LogDetailDto> findAllLogDetailDto(RequestDto rd, List<String> items, PageRequest pageable)
+	public List<LogDetailDto> findAllLogDetailDto(RequestDto rd, List<String> items, PageRequest pageable, Sort sort)
 			throws Exception {
-		return convertToDtos(detailCustom.findAllByParameter(rd, LogDetail.class, items, pageable));
+		return convertToDtos(detailCustom.findAllByParameter(rd, LogDetail.class, items, pageable, sort));
+	}
+	
+	public List<Long> findIds(RequestDto rd, PageRequest pageable, Sort sort)
+			throws Exception {
+		return detailCustom.findIds(rd, pageable, sort);
 	}
 
-	public List<LogDetail> findAllLogDetail(RequestDto rd, List<String> items, PageRequest pageable) throws Exception {
-		return detailCustom.findAllByParameter(rd, LogDetail.class, items, pageable);
+	public List<LogDetail> findAllLogDetail(RequestDto rd, PageRequest pageable, Sort sort) throws Exception {
+		return detailCustom.findAllCustom(rd, LogDetail.class, pageable, sort);
 	}
 
 	public Long count(RequestDto filter) {
 		return this.detailCustom.count(filter);
+	}
+
+	public List<LogDetailDtoShort> findAllLogDetailShortDto(RequestDto requestDto, PageRequest pageable, Sort sort) {
+		return detailCustom.findAllCustom(requestDto, LogDetailDtoShort.class, pageable, sort);
+	}
+
+	public List<LogDetailDtoShort> findAllLogDetailShortDtoByIds(RequestDto requestDto, Sort sort) {
+		return detailCustom.findAllCustomByids(requestDto, sort, LogDetailDtoShort.class);
+	}
+	
+	public List<LogDetailDto> findAllLogDetailDtoByIds(RequestDto requestDto, Sort sort) {
+		return convertToDtos(detailCustom.findAllCustomByids(requestDto, sort, LogDetail.class));
 	}
 }

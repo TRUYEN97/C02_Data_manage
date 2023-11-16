@@ -27,6 +27,7 @@ import com.tec02.Service.impl.impl.LogDetailService;
 import com.tec02.model.dto.RequestDto;
 import com.tec02.model.dto.ResponseDto;
 import com.tec02.model.dto.impl.LogDetailDto;
+import com.tec02.model.dto.impl.LogDetailDtoShort;
 
 @RestController
 public class LogDetailAPI {
@@ -84,11 +85,13 @@ public class LogDetailAPI {
 			@RequestParam(name = "sortBy", defaultValue = "id") String softBy,
 			@RequestParam(name = "sortType", defaultValue = "desc") String softType) {
 		try {
-			Direction direction = softType.equalsIgnoreCase("asc") ? Direction.ASC : Direction.DESC;
-			Sort sort = Sort.by(direction, softBy);
-			List<LogDetailDto> logs = page == null || size == null
-					? this.logDetailService.findAllLogDetailDto(requestDto, items, null)
-					: this.logDetailService.findAllLogDetailDto(requestDto, items, PageRequest.of(page, size, sort));
+			Sort sort = Sort.by(softType.equalsIgnoreCase("asc") ? Direction.ASC : Direction.DESC, softBy);
+			List<LogDetailDto> logs = null;
+			if(page == null || size == null) {
+				logs = this.logDetailService.findAllLogDetailDto(requestDto, items, null, sort);
+			}else {
+				logs = this.logDetailService.findAllLogDetailDto(requestDto, items, PageRequest.of(page, size), sort);
+			}
 			if (logs == null || logs.isEmpty()) {
 				return ResponseDto.toResponse(false, List.of(), "Not found!");
 			}
@@ -96,6 +99,68 @@ public class LogDetailAPI {
 			return ResponseDto.toResponse(true, logs, "ok");
 		} catch (Exception e) {
 			logger.error(String.format("Get log: %s", e.getLocalizedMessage()));
+			return ResponseDto.toResponse(false, null, e.getLocalizedMessage());
+		}
+	}
+	
+	@GetMapping("api/v1/log/short")
+	public ResponseEntity<ResponseDto> findShortAll(@RequestParam(name = "ids") List<Long> ids,
+			@RequestParam(name = "sortBy", defaultValue = "id") String softBy,
+			@RequestParam(name = "sortType", defaultValue = "desc") String softType) {
+		try {
+			Sort sort = Sort.by(softType.equalsIgnoreCase("asc") ? Direction.ASC : Direction.DESC, softBy);
+			RequestDto requestDto = new RequestDto();
+			requestDto.setIds(ids);
+			List<LogDetailDtoShort> logs = this.logDetailService.findAllLogDetailShortDtoByIds(requestDto , sort);
+			if (logs == null || logs.isEmpty()) {
+				return ResponseDto.toResponse(false, List.of(), "Not found!");
+			}
+			logger.info(String.format("Get short log: %s logs", logs.size()));
+			return ResponseDto.toResponse(true, logs, "ok");
+		} catch (Exception e) {
+			logger.error(String.format("Get short log: %s", e.getLocalizedMessage()));
+			return ResponseDto.toResponse(false, null, e.getLocalizedMessage());
+		}
+	}
+	
+	@GetMapping("api/v1/log/full")
+	public ResponseEntity<ResponseDto> findAll(@ModelAttribute RequestDto requestDto,
+			@RequestParam(name = "sortBy", defaultValue = "id") String softBy,
+			@RequestParam(name = "sortType", defaultValue = "desc") String softType) {
+		try {
+			Sort sort = Sort.by(softType.equalsIgnoreCase("asc") ? Direction.ASC : Direction.DESC, softBy);
+			List<LogDetailDto> logs = this.logDetailService.findAllLogDetailDtoByIds(requestDto, sort);
+			if (logs == null || logs.isEmpty()) {
+				return ResponseDto.toResponse(false, List.of(), "Not found!");
+			}
+			logger.info(String.format("Get full log: %s logs", logs.size()));
+			return ResponseDto.toResponse(true, logs, "ok");
+		} catch (Exception e) {
+			logger.error(String.format("Get full log: %s", e.getLocalizedMessage()));
+			return ResponseDto.toResponse(false, null, e.getLocalizedMessage());
+		}
+	}
+	
+	@GetMapping("api/v1/log/id")
+	public ResponseEntity<ResponseDto> findIdAll(@ModelAttribute RequestDto requestDto,
+			@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size,
+			@RequestParam(name = "sortBy", defaultValue = "id") String softBy,
+			@RequestParam(name = "sortType", defaultValue = "desc") String softType) {
+		try {
+			Sort sort = Sort.by(softType.equalsIgnoreCase("asc") ? Direction.ASC : Direction.DESC, softBy);
+			List<Long> logs = null;
+			if(page == null || size == null) {
+				logs = this.logDetailService.findIds(requestDto,  null, sort);
+			}else {
+				logs = this.logDetailService.findIds(requestDto,  PageRequest.of(page, size), sort);
+			}
+			if (logs == null || logs.isEmpty()) {
+				return ResponseDto.toResponse(false, List.of(), "Not found!");
+			}
+			logger.info(String.format("Get id: %s", logs.size()));
+			return ResponseDto.toResponse(true, logs, "ok");
+		} catch (Exception e) {
+			logger.error(String.format("Get id: %s", e.getLocalizedMessage()));
 			return ResponseDto.toResponse(false, null, e.getLocalizedMessage());
 		}
 	}

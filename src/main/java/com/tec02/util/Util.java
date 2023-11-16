@@ -3,13 +3,19 @@ package com.tec02.util;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Parameter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.util.DigestUtils;
 
@@ -46,6 +52,41 @@ public class Util {
 		}
 		return predicates;
 	}
+	
+	public static Set<String> getFields(Class<?> clazz){
+		Set<String> rs = new HashSet<>();
+		while (clazz != null) {
+            Field[] fields = clazz.getDeclaredFields();
+            for (Field field : fields) {
+                rs.add(field.getName());
+            }
+            clazz = clazz.getSuperclass();
+        }
+		return rs;
+	}
+	
+	public static List<String> getRetainField(Class<?> clazz, Class<?> root){
+		Set<String> fields = getFields(clazz);
+		Set<String> rootFields = getFields(root);
+		List<String> common = rootFields.stream().filter(fields :: contains).collect(Collectors.toList());
+		if(common == null || common.isEmpty()) {
+			throw new RuntimeException("root class not contian fields of DTO");
+		}
+		Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+        List<String> constParam = new ArrayList<>();
+        for (Constructor<?> constructor : constructors) {
+            Parameter[] parameters = constructor.getParameters();
+            constParam.clear();
+            for (Parameter parameter : parameters) {
+            	constParam.add(parameter.getName());
+            }
+            if(common.containsAll(constParam)) {
+            	return constParam;
+            }
+        }
+        throw new RuntimeException("no matching constructor found and one or more arguments did not define alias for bean-injection");
+	}
+	
 
 	public static boolean isNullorEmpty(String str) {
 		return str == null || str.isEmpty();

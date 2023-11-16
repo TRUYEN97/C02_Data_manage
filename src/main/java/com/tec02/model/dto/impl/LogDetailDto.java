@@ -3,6 +3,7 @@ package com.tec02.model.dto.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +11,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class LogDetailDto extends HaveLocationDtio {
+@AllArgsConstructor
+public class LogDetailDto extends HaveLocationDto {
 	private String sn;
 	private String mlbsn;
 	private String mo;
