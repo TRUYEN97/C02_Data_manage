@@ -1,7 +1,7 @@
 package com.tec02.model.dto;
 
 import java.time.Instant;
-import java.util.List;
+import java.util.Set;
 
 import com.tec02.util.Util;
 
@@ -13,9 +13,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class RequestDto {
-	protected List<Long> ids;
-	protected List<String> contains;
-	protected List<String> items;
+	protected Set<Long> ids;
+	protected Set<String> sns;
+	protected Set<String> contains;
+	protected Set<String> items;
 	protected String sn;
 	protected String mlbsn;
 	protected String mo;

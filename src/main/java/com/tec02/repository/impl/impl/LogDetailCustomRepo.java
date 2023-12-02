@@ -2,6 +2,7 @@ package com.tec02.repository.impl.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -21,7 +22,7 @@ public class LogDetailCustomRepo extends BaseRopoImpl<LogDetail, RequestDto> {
 	}
 
 	private final CreatePredicate<RequestDto> crPreFindByIds = (filter, cb, root, query) -> {
-		List<Long> ids = filter.getIds();
+		Set<Long> ids = filter.getIds();
 		if (ids != null) {
 			Predicate[] predicates = ids.stream().map(id -> cb.equal(root.get("id"), id)).toArray(Predicate[]::new);
 			query.where(cb.or(predicates));
@@ -32,7 +33,13 @@ public class LogDetailCustomRepo extends BaseRopoImpl<LogDetail, RequestDto> {
 
 	private final CreatePredicate<RequestDto> createPredicate = (filter, cb, root, query) -> {
 		List<Predicate> predicates = new ArrayList<>();
-		if (filter.getSn() != null || filter.getMlbsn() != null) {
+		Set<String> sns = filter.getSns();
+		if (sns != null) {
+			Predicate[] predicatesSn = sns.stream().map(sn -> cb.equal(root.get("sn"), sn)).toArray(Predicate[]::new);
+			Predicate[] predicatesMlbsn = sns.stream().map(sn -> cb.equal(root.get("mlbsn"), sn)).toArray(Predicate[]::new);
+			predicates.add(cb.or(predicatesSn));
+			predicates.add(cb.or(predicatesMlbsn));
+		} else if (filter.getSn() != null || filter.getMlbsn() != null) {
 			List<Predicate> p = new ArrayList<>();
 			if (filter.getSn() != null) {
 				p.add(cb.equal(root.get("sn"), filter.getSn()));

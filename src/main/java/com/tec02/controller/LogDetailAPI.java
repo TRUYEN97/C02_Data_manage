@@ -2,6 +2,7 @@ package com.tec02.controller;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -104,7 +105,7 @@ public class LogDetailAPI {
 	}
 	
 	@GetMapping("api/v1/log/short")
-	public ResponseEntity<ResponseDto> findShortAll(@RequestParam(name = "ids") List<Long> ids,
+	public ResponseEntity<ResponseDto> findShortAll(@RequestParam(name = "ids") Set<Long> ids,
 			@RequestParam(name = "sortBy", defaultValue = "id") String softBy,
 			@RequestParam(name = "sortType", defaultValue = "desc") String softType) {
 		try {

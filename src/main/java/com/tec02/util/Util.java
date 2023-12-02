@@ -80,7 +80,7 @@ public class Util {
             for (Parameter parameter : parameters) {
             	constParam.add(parameter.getName());
             }
-            if(common.containsAll(constParam)) {
+            if(!constParam.isEmpty() && common.containsAll(constParam)) {
             	return constParam;
             }
         }
