@@ -35,10 +35,12 @@ public class LogDetailCustomRepo extends BaseRopoImpl<LogDetail, RequestDto> {
 		List<Predicate> predicates = new ArrayList<>();
 		Set<String> sns = filter.getSns();
 		if (sns != null) {
+			List<Predicate> p = new ArrayList<>();
 			Predicate[] predicatesSn = sns.stream().map(sn -> cb.equal(root.get("sn"), sn)).toArray(Predicate[]::new);
 			Predicate[] predicatesMlbsn = sns.stream().map(sn -> cb.equal(root.get("mlbsn"), sn)).toArray(Predicate[]::new);
-			predicates.add(cb.or(predicatesSn));
-			predicates.add(cb.or(predicatesMlbsn));
+			p.add(cb.or(predicatesSn));
+			p.add(cb.or(predicatesMlbsn));
+			predicates.add(cb.or(p.toArray(new Predicate[0])));
 		} else if (filter.getSn() != null || filter.getMlbsn() != null) {
 			List<Predicate> p = new ArrayList<>();
 			if (filter.getSn() != null) {
