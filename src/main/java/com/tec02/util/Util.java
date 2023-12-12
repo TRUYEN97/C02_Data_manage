@@ -103,6 +103,13 @@ public class Util {
 			throw new RuntimeException("Invalid file name");
 		}
 	}
+	
+	public static String editFileName(String fileName) {
+		if(fileName == null) {
+			return null;
+		}
+		return fileName.replaceAll("[(?!\\\\.|\\\\s)(?!.*[\\\\\\\\/:*?\\\"<>|]).*(?<!\\\\.|\\\\s)|\\s]", "");
+	}
 
 	public static String objectToString(Object object) {
 		try {

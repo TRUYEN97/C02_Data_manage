@@ -72,10 +72,10 @@ public class LogDetailService extends BaseService<LogDetailDto, LogDetail> {
 		byte[] object = multipartFiles.get(0).getBytes();
 		UploadLogFileRequest uploadLogFileRequest = ModelMapperUtil.map(JSONObject.parse(object),
 				UploadLogFileRequest.class);
-		String sn = uploadLogFileRequest.getSn();
-		String mlbsn = uploadLogFileRequest.getMlbsn();
-		String pcname = uploadLogFileRequest.getPcname();
-		String mode = uploadLogFileRequest.getMode();
+		String sn = uploadLogFileRequest.getSn().replaceAll("\r|\n", "");
+		String mlbsn = uploadLogFileRequest.getMlbsn().replaceAll("\r|\n", "");
+		String pcname = uploadLogFileRequest.getPcname().replaceAll("\r|\n", "");
+		String mode = uploadLogFileRequest.getMode().replaceAll("\r|\n", "");
 		if ((sn == null || sn.isBlank()) && (mlbsn == null || mlbsn.isBlank())) {
 			throw new Exception("sn and mblsn is empty!");
 		}
@@ -85,9 +85,9 @@ public class LogDetailService extends BaseService<LogDetailDto, LogDetail> {
 		if (pcname == null || pcname.isBlank()) {
 			throw new Exception("pcname is empty!");
 		}
-		String sProduct = uploadLogFileRequest.getProduct();
-		String sStation = uploadLogFileRequest.getStation();
-		String sLine = uploadLogFileRequest.getLine();
+		String sProduct = uploadLogFileRequest.getProduct().replaceAll("\r|\n", "");
+		String sStation = uploadLogFileRequest.getStation().replaceAll("\r|\n", "");
+		String sLine = uploadLogFileRequest.getLine().replaceAll("\r|\n", "");
 		if (uploadLogFileRequest == null || sProduct == null || sProduct.isBlank() || sStation == null
 				|| sStation.isBlank() || sLine == null || sLine.isBlank()) {
 			throw new Exception("invalid location!");
