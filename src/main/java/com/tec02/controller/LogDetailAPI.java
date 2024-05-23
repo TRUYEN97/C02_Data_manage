@@ -44,7 +44,8 @@ public class LogDetailAPI {
 			logDetailService.upload(files);
 			return ResponseDto.toResponse(true, null, "Save succeed!");
 		} catch (Exception e) {
-			logger.error(String.format("upload logs: %s", e.getLocalizedMessage()));
+			logger.error(String.format("upload logs: %s - %s",e.getClass().getSimpleName(),
+					e.getLocalizedMessage()));
 			return ResponseDto.toResponse(false, null, e.getLocalizedMessage());
 		}
 	}
@@ -64,7 +65,8 @@ public class LogDetailAPI {
 			logger.info(String.format("Download file: %s", path));
 			return ResponseDto.toDownloadResponse(headers, resource);
 		} catch (Exception e) {
-			logger.error(String.format("Download file: %s failed! %s", e.getLocalizedMessage()));
+			logger.error(String.format("Download file:%s - %s failed! %s",e.getClass().getSimpleName(),
+					path, e.getLocalizedMessage()));
 			return ResponseEntity.ofNullable(null);
 		}
 	}
@@ -74,7 +76,7 @@ public class LogDetailAPI {
 		try {
 			return ResponseDto.toResponse(true, this.logDetailService.count(requestDto), "ok");
 		} catch (Exception e) {
-			logger.error(String.format("Get count: %s", e.getLocalizedMessage()));
+			logger.error(String.format("Get count:%s - %s",e.getClass().getSimpleName(), e.getLocalizedMessage()));
 			return ResponseDto.toResponse(false, null, e.getLocalizedMessage());
 		}
 	}
@@ -99,7 +101,7 @@ public class LogDetailAPI {
 			logger.info(String.format("Get log: %s logs", logs.size()));
 			return ResponseDto.toResponse(true, logs, "ok");
 		} catch (Exception e) {
-			logger.error(String.format("Get log: %s", e.getLocalizedMessage()));
+			logger.error(String.format("Get log: %s - %s", e.getClass().getSimpleName(), e.getLocalizedMessage()));
 			return ResponseDto.toResponse(false, null, e.getLocalizedMessage());
 		}
 	}
@@ -168,7 +170,7 @@ public class LogDetailAPI {
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("api/v1/log")
-	public ResponseEntity<ResponseDto> delete(@RequestParam("id") Long... ids) {
+	public ResponseEntity<ResponseDto> delete(@RequestParam("ids") Long... ids) {
 		try {
 			this.logDetailService.delete(ids);
 			logger.info(String.format("delete logID: %s", List.of(ids)));

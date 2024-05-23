@@ -72,23 +72,33 @@ public class LogDetailService extends BaseService<LogDetailDto, LogDetail> {
 		byte[] object = multipartFiles.get(0).getBytes();
 		UploadLogFileRequest uploadLogFileRequest = ModelMapperUtil.map(JSONObject.parse(object),
 				UploadLogFileRequest.class);
-		String sn = uploadLogFileRequest.getSn().replaceAll("\r|\n", "");
-		String mlbsn = uploadLogFileRequest.getMlbsn().replaceAll("\r|\n", "");
-		String pcname = uploadLogFileRequest.getPcname().replaceAll("\r|\n", "");
-		String mode = uploadLogFileRequest.getMode().replaceAll("\r|\n", "");
+		if(uploadLogFileRequest == null) {
+			throw new Exception("invalid json file! uploadLogFileRequest == null");
+		}
+		String sn = uploadLogFileRequest.getSn();
+		String mlbsn = uploadLogFileRequest.getMlbsn();
+		String pcname = uploadLogFileRequest.getPcname();
+		String mode = uploadLogFileRequest.getMode();
 		if ((sn == null || sn.isBlank()) && (mlbsn == null || mlbsn.isBlank())) {
-			throw new Exception("sn and mblsn is empty!");
+			throw new Exception("sn and mlbsn is empty!");
+		}
+		sn = sn.replaceAll("\r", "").replaceAll("\n", "");
+		mlbsn = mlbsn.replaceAll("\r", "").replaceAll("\n", "");
+		if(sn.length() > 16 || mlbsn.length() > 16) {
+			throw new Exception("The length of SN and MLBSN must be less than 16 characters!");
 		}
 		if (mode == null || mode.isBlank()) {
 			throw new Exception("mode must be not null or empty!");
 		}
+		mode = mode.replaceAll("\r", "").replaceAll("\n", "");
 		if (pcname == null || pcname.isBlank()) {
 			throw new Exception("pcname is empty!");
 		}
-		String sProduct = uploadLogFileRequest.getProduct().replaceAll("\r|\n", "");
-		String sStation = uploadLogFileRequest.getStation().replaceAll("\r|\n", "");
-		String sLine = uploadLogFileRequest.getLine().replaceAll("\r|\n", "");
-		if (uploadLogFileRequest == null || sProduct == null || sProduct.isBlank() || sStation == null
+		pcname = pcname.replaceAll("\r", "").replaceAll("\n", "");
+		String sProduct = uploadLogFileRequest.getProduct();
+		String sStation = uploadLogFileRequest.getStation();
+		String sLine = uploadLogFileRequest.getLine();
+		if (sProduct == null || sProduct.isBlank() || sStation == null
 				|| sStation.isBlank() || sLine == null || sLine.isBlank()) {
 			throw new Exception("invalid location!");
 		}

@@ -23,7 +23,7 @@ public class LogDetailCustomRepo extends BaseRopoImpl<LogDetail, RequestDto> {
 
 	private final CreatePredicate<RequestDto> crPreFindByIds = (filter, cb, root, query) -> {
 		Set<Long> ids = filter.getIds();
-		if (ids != null) {
+		if (ids != null && !ids.isEmpty()) {
 			Predicate[] predicates = ids.stream().map(id -> cb.equal(root.get("id"), id)).toArray(Predicate[]::new);
 			query.where(cb.or(predicates));
 			return true;
@@ -34,65 +34,83 @@ public class LogDetailCustomRepo extends BaseRopoImpl<LogDetail, RequestDto> {
 	private final CreatePredicate<RequestDto> createPredicate = (filter, cb, root, query) -> {
 		List<Predicate> predicates = new ArrayList<>();
 		Set<String> sns = filter.getSns();
-		if (sns != null) {
+		if (sns != null && !sns.isEmpty()) {
 			List<Predicate> p = new ArrayList<>();
 			Predicate[] predicatesSn = sns.stream().map(sn -> cb.equal(root.get("sn"), sn)).toArray(Predicate[]::new);
-			Predicate[] predicatesMlbsn = sns.stream().map(sn -> cb.equal(root.get("mlbsn"), sn)).toArray(Predicate[]::new);
+			Predicate[] predicatesMlbsn = sns.stream().map(sn -> cb.equal(root.get("mlbsn"), sn))
+					.toArray(Predicate[]::new);
 			p.add(cb.or(predicatesSn));
 			p.add(cb.or(predicatesMlbsn));
 			predicates.add(cb.or(p.toArray(new Predicate[0])));
-		} else if (filter.getSn() != null || filter.getMlbsn() != null) {
+		} else {
+			String sn = filter.getSn();
+			String mlbsn = filter.getMlbsn();
 			List<Predicate> p = new ArrayList<>();
-			if (filter.getSn() != null) {
-				p.add(cb.equal(root.get("sn"), filter.getSn()));
+			if (sn != null && !sn.isBlank()) {
+				p.add(cb.equal(root.get("sn"), sn));
 			}
-			if (filter.getMlbsn() != null) {
-				p.add(cb.equal(root.get("mlbsn"), filter.getMlbsn()));
+			if (mlbsn != null && !mlbsn.isBlank()) {
+				p.add(cb.equal(root.get("mlbsn"), mlbsn));
 			}
-			predicates.add(cb.or(p.toArray(new Predicate[0])));
+			if (!p.isEmpty()) {
+				predicates.add(cb.or(p.toArray(new Predicate[0])));
+			}
 		}
-		if (filter.getMo() != null) {
-			predicates.add(cb.equal(root.get("mo"), filter.getMo()));
+		String mo = filter.getMo();
+		if (mo != null && !mo.isBlank()) {
+			predicates.add(cb.equal(root.get("mo"), mo));
 		}
-		if (filter.getEthernetmac() != null) {
-			predicates.add(cb.equal(root.get("ethernetmac"), filter.getEthernetmac()));
+		String mac = filter.getEthernetmac();
+		if (mac != null && !mac.isBlank()) {
+			predicates.add(cb.equal(root.get("ethernetmac"), mac));
 		}
-		if (filter.getMode() != null) {
-			predicates.add(cb.like(root.get("mode"), String.format("%%%s%%", filter.getMode())));
+		String mode = filter.getMode();
+		if (mode != null && !mode.isBlank()) {
+			predicates.add(cb.like(root.get("mode"), String.format("%%%s%%", mode)));
 		}
-		if (filter.getPnname() != null) {
-			predicates.add(cb.equal(root.get("pnname"), filter.getPnname()));
+		String pnname = filter.getPnname();
+		if (pnname != null && !pnname.isBlank()) {
+			predicates.add(cb.equal(root.get("pnname"), pnname));
 		}
-		if (filter.getPcname() != null) {
-			predicates.add(cb.like(root.get("pcname"), String.format("%%%s%%", filter.getPcname())));
+		String pcname = filter.getPcname();
+		if (pcname != null && !pcname.isBlank()) {
+			predicates.add(cb.like(root.get("pcname"), String.format("%%%s%%", pcname)));
 		}
-		if (filter.getTest_software_version() != null) {
-			predicates.add(cb.like(root.get("test_software_version"),
-					String.format("%s%%", filter.getTest_software_version())));
+		String version = filter.getTest_software_version();
+		if (version != null && !version.isBlank()) {
+			predicates.add(cb.like(root.get("test_software_version"), String.format("%s%%", version)));
 		}
-		if (filter.getPosition() != null) {
-			predicates.add(cb.like(root.get("position"), String.format("%%%s%%", filter.getPosition())));
+		String position = filter.getPosition();
+		if (position != null && !position.isBlank()) {
+			predicates.add(cb.like(root.get("position"), String.format("%%%s%%", position)));
 		}
-		if (filter.getError_code() != null) {
-			predicates.add(cb.like(root.get("error_code"), String.format("%%%s%%", filter.getError_code())));
+		String errorcode = filter.getError_code();
+		if (errorcode != null && !errorcode.isBlank()) {
+			predicates.add(cb.like(root.get("error_code"), String.format("%%%s%%", errorcode)));
 		}
-		if (filter.getError_details() != null) {
-			predicates.add(cb.like(root.get("error_details"), String.format("%%%s%%", filter.getError_details())));
+		String errorDes = filter.getError_details();
+		if (errorDes != null && !errorDes.isBlank()) {
+			predicates.add(cb.like(root.get("error_details"), String.format("%%%s%%", errorDes)));
 		}
-		if (filter.getStatus() != null) {
-			predicates.add(cb.equal(root.get("status"), filter.getStatus()));
+		String status = filter.getStatus();
+		if (status != null && !status.isBlank()) {
+			predicates.add(cb.equal(root.get("status"), status));
 		}
-		if (filter.getOnSfis() != null) {
-			predicates.add(cb.equal(root.get("onSfis"), filter.getOnSfis()));
+		String sfis = filter.getOnSfis();
+		if (sfis != null && !sfis.isBlank()) {
+			predicates.add(cb.equal(root.get("onSfis"), sfis));
 		}
-		if (filter.getProduct() != null) {
-			predicates.add(cb.equal(root.get("product").get("name"), filter.getProduct()));
+		String product = filter.getProduct();
+		if (product != null && !product.isBlank()) {
+			predicates.add(cb.equal(root.get("product").get("name"), product));
 		}
-		if (filter.getStation() != null) {
-			predicates.add(cb.equal(root.get("station").get("name"), filter.getStation()));
+		String station = filter.getStation();
+		if (station != null && !station.isBlank()) {
+			predicates.add(cb.equal(root.get("station").get("name"), station));
 		}
-		if (filter.getLine() != null) {
-			predicates.add(cb.equal(root.get("line").get("name"), filter.getLine()));
+		String line = filter.getLine();
+		if (line != null && !line.isBlank()) {
+			predicates.add(cb.equal(root.get("line").get("name"), line));
 		}
 		if (filter.getStart_time() != null && filter.getFinish_time() != null) {
 			predicates.add(cb.between(root.get("finish_time"), filter.getStart_time(), filter.getFinish_time()));
